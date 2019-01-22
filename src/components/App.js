@@ -14,25 +14,26 @@ class App extends Component {
       posts: []
     };
 
-    this.updatePost = this.updatePost.bind( this );
-    this.deletePost = this.deletePost.bind( this );
-    this.createPost = this.createPost.bind( this );
+    this.updatePost = this.updatePost.bind(this);
+    this.deletePost = this.deletePost.bind(this);
+    this.createPost = this.createPost.bind(this);
   }
-  
+
   componentDidMount() {
     axios.get('https://practiceapi.devmountain.com/api/posts').then(results => {
-      this.setState=({
+      console.log(results);
+      this.setState({
         posts: results.data
       })
     })
   }
 
   updatePost(id, text) {
-  axios.put(`https://practiceapi.devmountain.com/api/posts?id=${id}`, {text}).then(results => {
-    this.setState({
-      posts: results.data
+    axios.put(`https://practiceapi.devmountain.com/api/posts?id=${id}`, { text }).then(results => {
+      this.setState({
+        posts: results.data
+      })
     })
-  })
   }
 
   deletePost(id) {
@@ -44,11 +45,9 @@ class App extends Component {
   }
 
   createPost(text) {
-    axios.post('https://practiceapi.devmountain.com/api/posts', {text}).then(results => {
-      this.setState({
-        posts: results.data
-      })
-    })
+    axios.post('https://practiceapi.devmountain.com/api/posts', { text }).then( (results) => {
+      this.setState({ posts: results.data });
+    });
   }
 
   render() {
@@ -61,14 +60,19 @@ class App extends Component {
         <section className="App__content">
 
           <Compose createPostFn={this.createPost} />
-          {console.log(posts)}
-
-          {
-            posts.map( post => (
-            <Post deletePostFn={this.deletePost}updatePostFn={this.updatePost}text={posts.text} date={posts.date} key={ post.id } id={post.id} />
-          ))
-          }
           
+          {
+            posts.map(post => {
+              console.log(post);
+         return <Post deletePostFn={this.deletePost} updatePostFn={this.updatePost} 
+      text={post.text} date={post.date} key={post.id} id={post.id}
+       />
+    })
+    }
+    
+          
+          
+
         </section>
       </div>
     );
